@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>One to log them all test page</title>
+    </head>
+    
+    <body>
+        <script src="Log.js"></script>
+        <script src="tools/Log.get.js"></script>
+        <script src="tools/Log.submit.js"></script>
+        <script src="reporters/ConsoleReporter.js"></script>
+        <script src="reporters/OnErrorAdapter.js"></script>
+        <script>
+            ConsoleReporter.init({
+                "level": "*"
+            });
+            
+            Log.error("an error");
+            Log.warn("a warning");
+            Log.info("an information");
+            Log.log("a log message");
+            Log.debug("a debug message");
+
+            // force an error, handled by the OnErrorAdapter
+            foo();
+        </script>
+    </body>
+</html>
