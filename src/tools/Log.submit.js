@@ -7,13 +7,6 @@
  * @license (c) 2013 Matthias Reuter, licensed under MPL 2.0
  */
 
- /**
- * A function to serialize log entries.
- *
- * @type {function}
- */
-Log.serializer = JSON.stringify;
-
 /**
  * Submit the log entries.
  *
@@ -37,4 +30,6 @@ Log.submit = function (data, async) {
     httpRequest = new XMLHttpRequest();
     httpRequest.open("POST", submitUrl, async !== false);
     httpRequest.send(Log.serializer(data));
+
+    return true;
 };

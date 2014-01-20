@@ -21,10 +21,14 @@ OnUnloadReporter = (function () {
      *   });
      *
      * @param {string} level
-     * @param {Object} data
+     * @param {string} message
      */
-    function OnUnloadReporter(level, data) {
-        queue.push(data);
+    function OnUnloadReporter(level, message) {
+        queue.push({
+            timestamp: Date.now(),
+            level: level,
+            message: message
+        });
     }
 
     /*

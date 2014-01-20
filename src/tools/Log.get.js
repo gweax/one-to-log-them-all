@@ -7,15 +7,6 @@
  * @license (c) 2013 Matthias Reuter, licensed under MPL 2.0
  */
 
- /**
- * Get all log entries created. Can be filtered for log levels and creation time.
- *
- * @param {string} [level=*] A space separated list of log levels. Only entries
- *          of these levels will be returned.
- * @param {number} [timestamp=0] A timestamp. Only entries newer than this
- *          timestamp will be returned.
- * @returns {Array} A list of log entries
- */
 Log.get = (function () {
 
     var logEntries = [];
@@ -45,8 +36,15 @@ Log.get = (function () {
         };
     }
 
-    /*
-     * See documentation on Log.get
+    /**
+     * Get all log entries created. Can be filtered for log levels and creation time.
+     *
+     * @alias Log.get
+     * @param {string} [level=*] A space separated list of log levels. Only entries
+     *          of these levels will be returned.
+     * @param {number} [timestamp=0] A timestamp. Only entries newer than this
+     *          timestamp will be returned.
+     * @returns {Array} A list of log entries
      */
     function get(level, timestamp) {
         var levels, entries = logEntries;
@@ -67,8 +65,12 @@ Log.get = (function () {
     /*
      * Collects all log entries
      */
-    function collect(level, entry) {
-        logEntries.push(entry);
+    function collect(level, message) {
+        logEntries.push({
+            timestamp: Date.now(),
+            level: level,
+            message: message
+        });
     }
 
     Log.on("*", collect);

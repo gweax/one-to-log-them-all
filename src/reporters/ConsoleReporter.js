@@ -19,9 +19,9 @@
  *   });
  *
  * @param {string} level
- * @param {Object} data
+ * @param {string} message
  */
-ConsoleReporter = function (level, data) {
+ConsoleReporter = function (level, message) {
     // Do this check on every call. IE does not have console unless it is open.
     // This way logs can be reported when the console was opened after page load
     if (window.console) {
@@ -29,7 +29,7 @@ ConsoleReporter = function (level, data) {
             level = "log";
         }
 
-        console[level](data.message, data);
+        console[level](message);
     }
 };
 

@@ -17,11 +17,11 @@ There are five different log methods for five different log levels:
 
 These methods don't do anything on their own. They are just there as an interface. In your code you call
 
-    if (index === -1) { 
+    if (index === -1) {
         Log.error("Something went wrong");
     }
 
-and for the moment don't care what that means. You can pass in a second argument, maybe an error:
+and for the moment don't care what that means. You can pass in as many arguments as you wish, maybe an error:
 
     try {
         doSomething();
@@ -29,18 +29,22 @@ and for the moment don't care what that means. You can pass in a second argument
         Log.error("doSomething went wrong", e);
     }
 
-Easy to use. But of course you do care what that means. So we add meaning to the logging. This is done via a reporter.
+You can use the same syntax as on console.log:
+
+    Log.info("1994 was %s years ago.", new Date().getFullYear() - 1994);
+
+Easy to use. Now let's add some meaning to the logging. This is done via a reporter.
 
 
 ## Reporter
 
 A reporter is a function that is called on any of the log methods. It's where the action happens. For example, you could report to the console:
 
-    function ConsoleReporter (level, logEntry) {
-        console[level](logEntry.message);
+    function ConsoleReporter (level, message) {
+        console[level](message);
     }
 
-The reporter function gets two parameters, the first is a string which tells it what log level the call is for. The second parameter is an object with the properties `timestamp` (when did the logging happen), `message` (what was logged), `detail` (any further information) and `level`, which is the same as the first parameter.
+The reporter function gets two parameters, the first is a string which tells it what log level the call is for. The second parameter is a string created from the arguments of the call to `Log[level]`.
 
 You have to connect the Logger and a reporter, so that the reporter is called everytime one of the logger methods is called. Maybe you are not interested in all method calls, so you just listen to some of them:
 
@@ -104,7 +108,9 @@ Several reporters or adapters need to do the same things. For example, all backe
 
 ### Log.get
 
-Maybe you cannot initialize the reporter at the start of the page. Maybe there are calls to `Log.error` before. `Log.get` is an easy way to handle this case. It just collects all log entries. When calling `Log.get`, it will return an array of all entries collected until then. You can pass in a string of all log levels you are interested in, just as in calls to `Log.on`:
+Maybe you cannot initialize the reporter at the start of the page. Maybe there are calls to `Log.error` before. `Log.get` is an easy way to handle this case. It just collects all log entries. When calling `Log.get`, it will return an array of all entries collected until then. Each entry is an object with three properties: `timestamp`, the timestamp of when the event occured, `level`, the log level and `message`.
+
+You can pass in a string of all log levels you are interested in, just as in calls to `Log.on`:
 
     Log.get("error warn");
 
@@ -137,7 +143,7 @@ Reporters that need initialization should use `Log.get`, if it's available.
 
 If you want to write your own reporter, you need to implement a function
 
-    function Reporter (level, entry) {}
+    function Reporter (level, message) {}
 
 If your reporter needs configuration (besides the level), offer an init function:
 

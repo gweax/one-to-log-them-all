@@ -18,15 +18,15 @@
  *   });
  *
  * @param {string} level
- * @param {Object} data
+ * @param {string} message
  */
-WicketLogReporter = function (level, data) {
+WicketLogReporter = function (level, message) {
     if (typeof Wicket === "object" && Wicket.Log) {
         if (!Wicket.Log.hasOwnProperty(level)) {
             level = "info";
         }
 
-        Wicket.Log[level](data.message);
+        Wicket.Log[level](message);
     }
 };
 

@@ -23,10 +23,14 @@ BatchReporter = (function () {
      *   });
      *
      * @param {string} level
-     * @param {Object} data
+     * @param {string} message
      */
-    function BatchReporter(level, data) {
-        queue.push(data);
+    function BatchReporter(level, message) {
+        queue.push({
+            timestamp: Date.now(),
+            level: level,
+            message: message
+        });
 
         if (queue.length >= Log.config.batchSize) {
             Log.submit(queue, true);
@@ -34,7 +38,7 @@ BatchReporter = (function () {
         }
     }
 
-    
+
     /*
      * Submit the queue
      */
@@ -94,6 +98,8 @@ BatchReporter = (function () {
         if (config.flushOnUnload !== false) {
             addOnUnloadHandler();
         }
+
+        Log.on(level, BatchReporter)
     };
 
 }());

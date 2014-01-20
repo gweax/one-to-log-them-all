@@ -23,10 +23,14 @@ IntervalReporter = (function () {
      *   });
      *
      * @param {string} level
-     * @param {Object} data
+     * @param {string} message
      */
-    function IntervalReporter(level, data) {
-        queue.push(data);
+    function IntervalReporter(level, message) {
+        queue.push({
+            timestamp: Date.now(),
+            level: level,
+            message: message
+        });
     }
 
     /*

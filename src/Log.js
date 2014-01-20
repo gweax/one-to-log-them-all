@@ -22,12 +22,35 @@ Log = (function () {
         listeners[level] = [];
     });
 
+    /**
+     * Converts an array of arguments into a string, just like console.log etc. do.
+     *
+     * @param {Array} args
+     * @returns {string}
+     */
+    function stringifyArguments(args) {
+        var regExp = /%[sino]/;
+
+        return args.reduce(function (prev, curr) {
+            var result,
+                curr = typeof curr === "object" ? Log.serializer(curr) : curr;
+
+            if (regExp.test(prev)) {
+                result = prev.replace(regExp, curr);
+            } else {
+                result = prev + " " + curr;
+            }
+
+            return result;
+        }, "").trim();
+    }
+
     Log = {
         /**
          * Attach a reporter to all log entries of a certain level.
          *
          * @param {string} level A space separated list of log levels.
-         * @param {reporter} handler A reporter. On logging, this handler will
+         * @param {function} handler A reporter. On logging, this handler will
          *          be called with two parameters, the level and the log entry
          */
         "on": function (level, handler) {
@@ -48,29 +71,21 @@ Log = (function () {
             }
         },
 
+        "serializer": JSON.stringify,
+
         "config": {
             "defaultLevel": "*"
         }
     };
 
     logLevels.forEach(function (level) {
-        Log[level] = function (message, detail) {
-            var levelListeners, logEntry;
+        Log[level] = function () {
+            var message = stringifyArguments(Array.apply(null, arguments)),
+                levelListeners = listeners[level];
 
-            logEntry = {
-                "timestamp": Date.now(),
-                "level": level,
-                "message": message
-            };
-
-            if (detail) {
-                logEntry.detail = detail;
-            }
-
-            levelListeners = listeners[level];
             levelListeners.forEach(function (listener) {
                 try {
-                    listener(level, logEntry);
+                    listener(level, message);
                 } catch (ignore) {
                     // ignore
                 }
