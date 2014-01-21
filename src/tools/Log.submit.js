@@ -1,4 +1,4 @@
-/*jslint unparam: true, sloppy: true, indent: 4, maxlen: 120 */
+/*jslint unparam: true, indent: 4, maxlen: 120 */
 /*global Log:false, XMLHttpRequest:false */
 
 /**
@@ -18,6 +18,8 @@
  * @param {boolean} [async=true] Whether to submit the data asynchronously
  */
 Log.submit = function (data, async) {
+    "use strict";
+
     var httpRequest, submitUrl;
 
     submitUrl = Log.config.submitUrl;

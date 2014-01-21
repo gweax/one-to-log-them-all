@@ -1,4 +1,4 @@
-/*jslint unparam: true, sloppy: true, indent: 4, maxlen: 120 */
+/*jslint unparam: true, indent: 4, maxlen: 120 */
 /*global IntervalReporter:true, Log:false, window:false */
 
 /**
@@ -8,6 +8,7 @@
  */
 
 IntervalReporter = (function () {
+    "use strict";
 
     var queue = [], interval;
 

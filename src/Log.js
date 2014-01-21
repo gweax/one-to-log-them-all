@@ -1,4 +1,4 @@
-/*jslint unparam: true, sloppy: true, indent: 4, maxlen: 120 */
+/*jslint unparam: true, indent: 4, maxlen: 120 */
 /*global Log:true */
 
 /**
@@ -12,6 +12,7 @@
  */
 
 Log = (function () {
+    "use strict";
 
     var logLevels, listeners, Log;
 
@@ -29,12 +30,12 @@ Log = (function () {
 
         return args.reduce(function (prev, curr) {
             var result,
-                curr = typeof curr === "object" ? Log.serializer(curr) : curr;
+                str = typeof curr === "object" ? Log.serializer(curr) : curr;
 
             if (regExp.test(prev)) {
-                result = prev.replace(regExp, curr);
+                result = prev.replace(regExp, str);
             } else {
-                result = prev + " " + curr;
+                result = prev + " " + str;
             }
 
             return result;
@@ -126,6 +127,7 @@ Log = (function () {
  * @property {string} logEntry.level The log level
  * @property {string} logEntry.message The log message given
  * @property {object} logEntry.detail Any further information passed in
+*/
 
 /**
  * A reporter function

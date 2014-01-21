@@ -1,4 +1,4 @@
-/*jslint unparam: true, sloppy: true, indent: 4, maxlen: 120 */
+/*jslint unparam: true, indent: 4, maxlen: 120 */
 /*global Wicket:false, Log:false */
 
 /**
@@ -15,6 +15,8 @@ if (typeof Wicket === "object" && Wicket.Log) {
 
     // Wicket log levels are error, info and log
     ["error", "info", "log"].forEach(function (level) {
+        "use strict";
+
         var original = Wicket.Log[level];
 
         Wicket.Log[level] = function (message) {

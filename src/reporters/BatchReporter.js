@@ -1,4 +1,4 @@
-/*jslint unparam: true, sloppy: true, indent: 4, maxlen: 120 */
+/*jslint unparam: true, indent: 4, maxlen: 120 */
 /*global BatchReporter:true, Log:false, window:false */
 
 /**
@@ -8,6 +8,7 @@
  */
 
 BatchReporter = (function () {
+    "use strict";
 
     var queue = [];
 
@@ -99,7 +100,7 @@ BatchReporter = (function () {
             addOnUnloadHandler();
         }
 
-        Log.on(level, BatchReporter)
+        Log.on(level, BatchReporter);
     };
 
 }());

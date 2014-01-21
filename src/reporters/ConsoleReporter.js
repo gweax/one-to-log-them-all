@@ -1,4 +1,4 @@
-/*jslint unparam: true, sloppy: true, indent: 4, maxlen: 120 */
+/*jslint unparam: true, indent: 4, maxlen: 120 */
 /*global ConsoleReporter:true, Log:false, window:false, console:false */
 
 /**
@@ -22,6 +22,8 @@
  * @param {string} message
  */
 ConsoleReporter = function (level, message) {
+    "use strict";
+
     // Do this check on every call. IE does not have console unless it is open.
     // This way logs can be reported when the console was opened after page load
     if (window.console) {
@@ -40,5 +42,7 @@ ConsoleReporter = function (level, message) {
  * @param {string} [config.level] The log levels to report.
  */
 ConsoleReporter.init = function (config) {
+    "use strict";
+
     Log.on(config.level || Log.config.defaultLevel, ConsoleReporter);
 };

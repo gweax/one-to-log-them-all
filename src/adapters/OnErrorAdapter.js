@@ -1,4 +1,4 @@
-/*jslint unparam: true, sloppy: true, indent: 4, maxlen: 120 */
+/*jslint unparam: true, indent: 4, maxlen: 120 */
 /*global window:false, Log:false, printStackTrace:false */
 
 /**
@@ -10,10 +10,11 @@
 /**
  * Catch unhandled errors and publish those to Log.error.
  *
- * If printStackTrace() is available (see  http://stacktracejs.com/) the 
+ * If printStackTrace() is available (see  http://stacktracejs.com/) the
  * stacktrace will be included.
  */
 window.onerror = (function () {
+    "use strict";
 
     var originalOnError = window.onerror;
 
@@ -38,7 +39,7 @@ window.onerror = (function () {
                 // ignore
             }
         }
-        
+
         // return true to indicate that this error was properly handled (this
         // way it won't be reported to the error console)
         return true;

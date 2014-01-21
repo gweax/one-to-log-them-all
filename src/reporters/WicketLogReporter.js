@@ -1,4 +1,4 @@
-/*jslint unparam: true, sloppy: true, indent: 4, maxlen: 120 */
+/*jslint unparam: true, indent: 4, maxlen: 120 */
 /*global WicketLogReporter:true, Wicket:false, Log:false */
 
 /**
@@ -21,6 +21,8 @@
  * @param {string} message
  */
 WicketLogReporter = function (level, message) {
+    "use strict";
+
     if (typeof Wicket === "object" && Wicket.Log) {
         if (!Wicket.Log.hasOwnProperty(level)) {
             level = "info";
@@ -37,5 +39,7 @@ WicketLogReporter = function (level, message) {
  * @param {string} [config.level] The log levels to report.
  */
 WicketLogReporter.init = function (config) {
+    "use strict";
+
     Log.on(config.level || Log.config.defaultLevel, WicketLogReporter);
 };
