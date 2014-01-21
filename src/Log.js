@@ -18,10 +18,6 @@ Log = (function () {
     logLevels = ["error", "warn", "info", "log", "debug"];
     listeners = {};
 
-    logLevels.forEach(function (level) {
-        listeners[level] = [];
-    });
-
     /**
      * Converts an array of arguments into a string, just like console.log etc. do.
      *
@@ -43,6 +39,28 @@ Log = (function () {
 
             return result;
         }, "").trim();
+    }
+
+    /**
+     * Creates a log level function on the Log object.
+     *
+     * @param {string} level - The log level
+     */
+    function createLogLevelFunction(level) {
+        Log[level] = function () {
+            var message = stringifyArguments(Array.apply(null, arguments)),
+                levelListeners = listeners[level];
+
+            levelListeners.forEach(function (listener) {
+                try {
+                    listener(level, message);
+                } catch (ignore) {
+                    // ignore
+                }
+            });
+        };
+
+        listeners[level] = [];
     }
 
     Log = {
@@ -71,6 +89,22 @@ Log = (function () {
             }
         },
 
+        /**
+         * Add a custom log level. Custom log levels will not be matched by the '*' matcher.
+         *
+         * @param {string} level
+         * @return {boolean} Whether the creation of a custom log level succeeded.
+         */
+        "addLevel": function (level) {
+            if (typeof level !== "string" || level === "" || Log.hasOwnProperty(level)) {
+                return false;
+            }
+
+            createLogLevelFunction(level);
+
+            return true;
+        },
+
         "serializer": JSON.stringify,
 
         "config": {
@@ -78,20 +112,7 @@ Log = (function () {
         }
     };
 
-    logLevels.forEach(function (level) {
-        Log[level] = function () {
-            var message = stringifyArguments(Array.apply(null, arguments)),
-                levelListeners = listeners[level];
-
-            levelListeners.forEach(function (listener) {
-                try {
-                    listener(level, message);
-                } catch (ignore) {
-                    // ignore
-                }
-            });
-        };
-    });
+    logLevels.forEach(createLogLevelFunction);
 
     return Log;
 

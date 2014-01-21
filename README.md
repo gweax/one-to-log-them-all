@@ -121,7 +121,7 @@ Reporters that need initialization should use `Log.get`, if it's available.
 
 ## Examples
 
-### Report everything to console and errors to the backend on unload
+### Report everything to the console and errors to the backend on unload
 
     <script src="Log.js"></script>
     <script src="tools/Log.get.js"></script>
@@ -135,6 +135,23 @@ Reporters that need initialization should use `Log.get`, if it's available.
         "url": "/log.php"
     });
     </script>
+
+
+## Custom log methods
+
+Log comes with five predefined log methods: `debug`, `log`, `info`, `warn` and  `error`. Maybe this is not enough for you, because you want to report only some specific messages to a backend, not all of a given level. For this, you can add a custom log method:
+
+    Log.addLevel("remote");
+    BatchReporter.init({
+        "level": "remote",
+        "url": "/log.php"
+    });
+
+    Log.remote("This message will be logged to a backend");
+
+You cannot create a custom log method if its name would overwrite an existing method or property. For example, you cannot create a custom log method `on` or `config`. `Log.addLevel()` returns true, when it succeeded in creating that level, and false if it failed.
+
+Please note, that custom log levels are not included in the shortcut `*` matcher. It's a shortcut for the built-in levels only.
 
 
 ## Write your own

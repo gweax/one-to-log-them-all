@@ -36,6 +36,14 @@ describe("API", function () {
         expect(typeof Log.config).toBe("object");
     });
 
+    it("has a method 'addLevel'", function () {
+        expect(typeof Log.addLevel).toBe("function");
+    });
+
+    it("'addLevel' expects one parameter", function () {
+        expect(Log.addLevel.length).toBe(1);
+    });
+
     it("'config' has a property 'defaultLevel", function () {
         expect(Log.config.hasOwnProperty("defaultLevel")).toBe(true);
     });
@@ -176,5 +184,83 @@ describe("setting of log level", function () {
 
         Log.error("bazinga");
         expect(lastLevel).toBe("warn");
+    });
+});
+
+
+describe("custom log levels", function () {
+    var lastLevel, lastMessage;
+
+    function TestReporter(level, message) {
+        lastLevel = level;
+        lastMessage = message;
+    }
+
+    it("'addLevel' returns a boolean value", function () {
+        var success = Log.addLevel("custom2");
+        expect(typeof success).toBe("boolean");
+    });
+
+    it("'addLevel' returns true when successful, false otherwise", function () {
+        var success = Log.addLevel("custom3");
+        expect(success).toBe(true);
+
+        success = Log.addLevel("custom3");
+        expect(success).toBe(false);
+    });
+
+    it("'addLevel' does not overwrite build-in levels", function () {
+        var success = Log.addLevel("debug");
+        expect(success).toBe(false);
+
+        success = Log.addLevel("log");
+        expect(success).toBe(false);
+
+        success = Log.addLevel("info");
+        expect(success).toBe(false);
+
+        success = Log.addLevel("warn");
+        expect(success).toBe(false);
+
+        success = Log.addLevel("error");
+        expect(success).toBe(false);
+    });
+
+    it("prevents custom levels that are properties of Log", function () {
+        var success, oldValue;
+
+        oldValue = Log.on;
+        success = Log.addLevel("on");
+        expect(success).toBe(false);
+        expect(oldValue).toEqual(Log.on);
+
+        oldValue = Log.addLevel;
+        success = Log.addLevel("addLevel");
+        expect(success).toBe(false);
+        expect(oldValue).toEqual(Log.addLevel);
+
+        oldValue = Log.serializer;
+        success = Log.addLevel("serializer");
+        expect(success).toBe(false);
+        expect(oldValue).toEqual(Log.serializer);
+
+        oldValue = Log.config;
+        success = Log.addLevel("config");
+        expect(success).toBe(false);
+        expect(oldValue).toEqual(Log.config);
+    });
+
+    Log.addLevel("custom");
+
+    it("creates a method 'custom'", function () {
+        expect(typeof Log.custom).toBe("function");
+    });
+
+    Log.on("custom", TestReporter);
+
+    it("logs custom level", function () {
+        Log.custom("foo");
+        expect(lastLevel).toBe("custom");
+        expect(lastMessage).toBe("foo");
     });
 });
