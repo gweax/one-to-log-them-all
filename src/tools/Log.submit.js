@@ -27,9 +27,13 @@ Log.submit = function (data, async) {
         return false;
     }
 
-    httpRequest = new XMLHttpRequest();
-    httpRequest.open("POST", submitUrl, async !== false);
-    httpRequest.send(Log.serializer(data));
+    try {
+        httpRequest = new XMLHttpRequest();
+        httpRequest.open("POST", submitUrl, async !== false);
+        httpRequest.send(Log.serializer(data));
+    } catch (e) {
+        return false;
+    }
 
     return true;
 };
